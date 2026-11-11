@@ -1,0 +1,6 @@
+{
+  "name": "wasl-status",
+  "private": true,
+  "description": "Hosting for the wasl_status PILOT Extension and its backend function (api/wasl.js). No build step.",
+  "engines": { "node": "22.x" }
+}

@@ -1,129 +1,18 @@
-/* battery_status extension - every rule is scoped with the bs- prefix */
-.bs-pill {
-    display: inline-block;
-    padding: 1px 8px;
-    border-radius: 10px;
-    font-size: 12px;
-    line-height: 18px;
-    white-space: nowrap;
-    border: 1px solid transparent;
-}
-.bs-pill i { margin-right: 3px; }
-.bs-ok      { color: #1e7b34; background: #e5f5e9; border-color: #b9e2c3; }
-.bs-alert   { color: #b3261e; background: #fdeceb; border-color: #f3b8b4; }
-.bs-nodata  { color: #8a5a00; background: #fff4dc; border-color: #f0d49b; }
-.bs-unknown { color: #555;    background: #eeeeee; border-color: #d6d6d6; }
-
-/* tree / tab icons only take the colour */
-.x-tree-icon.bs-ok, .x-tab-icon-el.bs-ok, .x-tree-icon.bs-alert, .x-tab-icon-el.bs-alert,
-.x-tree-icon.bs-nodata, .x-tab-icon-el.bs-nodata, .x-tree-icon.bs-unknown, .x-tab-icon-el.bs-unknown {
-    background: none;
-    border: 0;
-}
-
-.bs-summary { padding: 10px 10px 4px; }
-.bs-tiles { display: flex; flex-wrap: wrap; gap: 10px; }
-.bs-tile {
-    position: relative;
-    min-width: 130px;
-    flex: 1 1 130px;
-    padding: 10px 12px 10px 46px;
-    border-radius: 6px;
-    background: #f6f7f9;
-    border: 1px solid #e3e6ea;
-}
-.bs-tile > i {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    margin-top: -10px;
-    font-size: 20px;
-    opacity: .8;
-}
-.bs-tile-value { font-size: 20px; font-weight: bold; line-height: 24px; }
-.bs-tile-label { font-size: 12px; color: #666; }
-.bs-tile-ok      > i, .bs-tile-ok      .bs-tile-value { color: #1e7b34; }
-.bs-tile-alert   > i, .bs-tile-alert   .bs-tile-value { color: #b3261e; }
-.bs-tile-nodata  > i, .bs-tile-nodata  .bs-tile-value { color: #8a5a00; }
-.bs-tile-unknown > i, .bs-tile-unknown .bs-tile-value { color: #555; }
-.bs-tile-total   > i { color: #2f6db5; }
-
-.bs-tab-badge {
-    display: inline-block;
-    min-width: 30px;
-    margin-left: 4px;
-    padding: 0 6px;
-    border-radius: 9px;
-    font-size: 11px;
-    line-height: 16px;
-    text-align: center;
-    border: 1px solid transparent;
-}
-.bs-count {
-    display: inline-block;
-    margin-left: 4px;
-    padding: 0 6px;
-    border-radius: 9px;
-    font-size: 11px;
-    line-height: 16px;
-    color: #fff;
-    background: #b3261e;
-}
-.bs-muted { color: #777; font-size: 12px; }
-.bs-note { margin-top: 6px; }
-.bs-error {
-    margin-top: 8px;
-    padding: 6px 10px;
-    color: #b3261e;
-    background: #fdeceb;
-    border: 1px solid #f3b8b4;
-    border-radius: 4px;
-}
-.bs-empty { padding: 20px; color: #777; text-align: center; }
-.bs-settings p { margin: 8px 0; line-height: 1.4; }
-.bs-object-tabs .x-tab { text-align: left; }
-
-/* v1.2.0: Warehouse Sensor Status layout (same look as the web report) */
-.bs-tile-on { box-shadow: 0 0 0 2px #2f6db5 inset; }
-.bs-progress { height: 6px; border-radius: 3px; background: #e3e6ea; overflow: hidden; }
-.bs-progress > div { height: 100%; background: #2f6db5; transition: width .2s; }
-.bs-grid .bs-row-low .x-grid-cell { background: #fdf3f2; }
-.bs-grid .bs-row-nodata .x-grid-cell { background: #f6f7f9; }
-.bs-grid .x-grid-row { cursor: pointer; }
-.bs-grid code, .x-window code { font-family: Consolas, monospace; font-size: 12px; }
-.bs-table { border-collapse: collapse; width: 100%; font-size: 12px; background: #fff; }
-.bs-table th, .bs-table td { border-bottom: 1px solid #e3e6ea; padding: 4px 8px; text-align: left; vertical-align: top; }
-.bs-table th { background: #f2f4f7; position: sticky; top: 0; }
-.bs-table .bs-num { text-align: right; }
-.bs-table tr.bs-row-low td { background: #fdf3f2; }
-.bs-table tr.bs-row-nodata td { background: #f6f7f9; }
-
-/* v1.3.0: Temperature Report, Geozones, Vehicles Battery, Export options */
-.bs-report .bs-table { font-size: 12px; }
-.bs-h { margin: 0 0 4px; font-size: 18px; color: #0f172a; }
-.bs-notice { margin-top: 8px; padding: 6px 10px; border-radius: 4px; border: 1px solid transparent; }
-.bs-notice-ok   { color: #1e7b34; background: #e5f5e9; border-color: #b9e2c3; }
-.bs-notice-warn { color: #8a5a00; background: #fff4dc; border-color: #f0d49b; }
-.bs-notice-err  { color: #b3261e; background: #fdeceb; border-color: #f3b8b4; }
-.bs-notice button, .bs-error button, .bs-report .bs-table button, .bs-logbar button {
-    margin-left: 6px; padding: 1px 8px; font-size: 12px; cursor: pointer;
-    border: 1px solid #c9ced6; border-radius: 4px; background: #fff;
-}
-.bs-table tr.bs-veh td { background: #eef3f6; font-weight: bold; }
-.bs-table tr.bs-long td { background: #fff4e5; }
-.bs-table tr.bs-sub td { background: #fafbfc; }
-.bs-table tfoot td { background: #e2f3f2; font-weight: bold; }
-.bs-readings { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 4px 0; }
-.bs-reading { font-size: 12px; color: #444; white-space: nowrap; }
-.bs-link { color: #2f6db5; font-weight: bold; }
-.bs-pre { white-space: pre-wrap; word-break: break-all; margin: 6px 0 0; font-size: 11px; background: #f6f7f9; padding: 6px; border-radius: 4px; }
-.bs-logbar { margin-bottom: 6px; }
-.bs-sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
-.bs-off .x-form-cb-label { color: #999; }
-.bs-geomap .leaflet-container { font: inherit; }
-@media print {
-    .bs-report .x-toolbar { display: none !important; }
-}
-
-/* v1.3.3: the object list shows the name and the badge only (status icons rendered as dots in PILOT's tree) */
-.bs-tree .x-tree-icon { display: none; }
+/* wasl_status PILOT Extension (Tailwind palette, scoped with ws-) */
+.ws-nav .ws-muted, .ws-grid .ws-muted { color: #94a3b8; }
+.ws-nav .ws-account-name { font-size: 15px; font-weight: 600; color: #0f172a; margin-top: 2px; word-break: break-all; }
+.ws-nav .ws-tag { font-size: 11px; font-weight: 500; background: #e0e7ff; color: #3730a3; border-radius: 4px; padding: 1px 6px; margin-left: 4px; }
+.ws-nav .ws-tiles { display: flex; gap: 6px; }
+.ws-nav .ws-tile { flex: 1; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 6px; text-align: center; background: #f8fafc; }
+.ws-nav .ws-tile b { display: block; font-size: 20px; color: #0f172a; }
+.ws-nav .ws-tile span { font-size: 11px; color: #64748b; }
+.ws-nav .ws-tile.ws-on b { color: #15803d; }
+.ws-nav .ws-tile.ws-off b { color: #b91c1c; }
+.ws-nav .ws-err { color: #b91c1c; }
+.ws-account-win .ws-note { font-size: 12px; color: #64748b; margin-top: 6px; line-height: 1.4; }
+.ws-grid .ws-empty { padding: 24px; color: #64748b; text-align: center; }
+.ws-grid .ws-badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+.ws-grid .ws-badge-on { background: #dcfce7; color: #166534; }
+.ws-grid .ws-badge-off { background: #fee2e2; color: #991b1b; }
+.ws-grid .ws-time-on { color: #15803d; }
+.ws-grid .ws-time-off { color: #b91c1c; }

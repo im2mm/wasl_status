@@ -1,108 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battery Status - PILOT Extension</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WASL Status – PILOT Extension</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background: #f5f5f5; color: #222; }
-        .container { max-width: 860px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.1); }
-        h1 { color: #2c3e50; border-bottom: 2px solid #2f6db5; padding-bottom: 10px; }
-        h2 { color: #2c3e50; margin-top: 28px; }
-        .box { background: #eef4fb; padding: 12px 16px; margin: 14px 0; border-left: 4px solid #2f6db5; }
-        code { background: #f1f1f1; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
-        pre { background: #f6f6f6; padding: 12px; border-radius: 4px; overflow-x: auto; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; vertical-align: top; }
-        th { background: #f2f4f7; }
+        body { font-family: Arial, Helvetica, sans-serif; color: #334155; background: #f8fafc; margin: 0; padding: 32px 16px; line-height: 1.5; }
+        main { max-width: 760px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px 28px; }
+        h1 { font-size: 24px; margin: 0 0 8px; color: #0f172a; }
+        h2 { font-size: 18px; margin: 28px 0 8px; color: #0f172a; }
+        code { background: #f1f5f9; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+        table { border-collapse: collapse; width: 100%; font-size: 14px; }
+        th, td { border: 1px solid #e2e8f0; padding: 6px 10px; text-align: left; vertical-align: top; }
+        th { background: #f1f5f9; }
+        .muted { color: #64748b; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Battery Status <small style="font-size:14px;color:#777;font-weight:normal">v1.3.5</small></h1>
-    <p>Warehouse Sensor Status inside PILOT: the latest battery voltage of every wireless temperature/humidity sensor on your objects, with the same rules as the Al Safi web report.</p>
+<main>
+    <h1>WASL Status</h1>
+    <p class="muted">PILOT Extension <code>wasl_status</code> · version 1.0.0</p>
 
-    <div class="box">
-        <strong>Where the values come from:</strong> the wireless sensors report inside the raw packet data
-        (<code>triggerdata</code>) that you also see in <em>Sensors Tracing</em>:
-        <code>BatteryVoltage&lt;id&gt;=3.630, BatteryVoltageStatus&lt;id&gt;=Normal, Temperature&lt;id&gt;=5.1, Humidity&lt;id&gt;=60, RSSI&lt;id&gt;=121</code>.
-        <code>&lt;id&gt;</code> is the sensor ID in decimal; the ID printed on the sensor is the same number in hex (2183475330 &rarr; 82253082).
-    </div>
+    <p>Lists every vehicle of a PILOT account with its WASL connection, using the same values PILOT shows in the
+       <em>WASL</em> and <em>WASL STATE</em> columns of the Online list.</p>
 
-    <h2>Status rules</h2>
-    <ul>
-        <li><strong>Normal</strong>: latest battery voltage is 3.3 V or more.</li>
-        <li><strong>Low</strong>: latest battery voltage is below 3.3 V.</li>
-        <li><strong>No reading</strong>: no voltage, or the latest voltage is older than 3 hours. It is not counted as Low; the last known voltage is shown greyed out.</li>
-        <li>The platform's own text (<code>BatteryVoltageStatus</code>) is shown under the status when it differs, e.g. "Battery Status: Normal".</li>
-    </ul>
-
-    <h2>Which sensors are listed</h2>
-    <ul>
-        <li>A sensor is listed when the object's sensor list has a <code>Temperature&lt;id&gt;</code> or <code>Humidity&lt;id&gt;</code> sensor for it. IDs the gateway happens to hear but that are not registered are ignored.</li>
-        <li>The name comes from the Temperature sensor (else Humidity); a <code>BTS-&lt;hex&gt;-</code> prefix is removed ("BTS-82253082-TEMP7" &rarr; "TEMP7").</li>
-        <li>Calculated "average" sensors and status/selector sensors are ignored everywhere.</li>
-    </ul>
-
-    <h2>Where to find it</h2>
-    <ul>
-        <li>Left menu: <strong>Battery Status</strong> tab, with two inner tabs:
-            <ul>
-                <li><strong>Warehouses</strong>: flat list of objects (no grouping) with a Normal/total badge. Click an object to open it.</li>
-                <li><strong>Settings</strong>: Duration (Now = last 24 hours, or the last 6, 12, 48, 72 hours) and auto refresh (off by default).</li>
-            </ul>
-        </li>
-        <li>Main area, three tabs:
-            <ul>
-                <li><strong>Overview</strong>: tiles Low / No reading / Normal / Sensors-objects (click a tile to filter), every sensor grouped by object (objects with most Low first), filter box, status filter, <em>Fetch battery status</em>, <em>Stop</em>, <em>Download Excel</em>.</li>
-                <li><strong>Alerts</strong>: sensors that are Low or No reading.</li>
-                <li><strong>Warehouses</strong>: one vertical tab per object with gateway battery, power supply, last packet and an <em>All sensors</em> button.</li>
-            </ul>
-        </li>
-        <li><strong>Click any sensor row</strong> for its readings in the last 24 hours: count, voltage min/max, readings below 3.3 V, a trend line and the full list.</li>
-    </ul>
+    <h2>Using it</h2>
+    <ol>
+        <li>Click the <strong>WASL Status</strong> icon on PILOT's left bar.</li>
+        <li>Choose <strong>Current account</strong> (the account you are signed in with) or
+            <strong>Another account</strong> and enter its login and password.</li>
+        <li>The list shows every vehicle. Use the filter (All / Connected / Not connected), the search box,
+            <strong>Refresh</strong>, <strong>Change account</strong> and <strong>Export CSV</strong>.</li>
+    </ol>
 
     <h2>Columns</h2>
     <table>
-        <tr><th>Column</th><th>Source</th></tr>
-        <tr><td>Sensor</td><td>Sensor name (see above)</td></tr>
-        <tr><td>Sensor ID</td><td>Hex ID; hover for the decimal ID</td></tr>
-        <tr><td>Voltage</td><td><code>BatteryVoltage&lt;id&gt;</code> of the newest packet that contained it</td></tr>
-        <tr><td>Status</td><td>Normal / Low / No reading (rules above)</td></tr>
-        <tr><td>Temp °C / Hum %</td><td><code>Temperature&lt;id&gt;</code>, <code>Humidity&lt;id&gt;</code></td></tr>
-        <tr><td>Last reading</td><td>Time of the newest packet with a voltage for this sensor (Asia/Riyadh)</td></tr>
+        <tr><th>Column</th><th>Meaning</th></tr>
+        <tr><td>Vehicle, Plate, Group</td><td>Object name, plate (object info) and the folder it is in.</td></tr>
+        <tr><td>WASL</td><td>Last time WASL accepted data for the vehicle. Green when it is less than 1 hour old, red when older (same rule as PILOT). Hover for the age.</td></tr>
+        <tr><td>WASL State</td><td><strong>Connected</strong> when WASL returned a state for the vehicle, otherwise <strong>Not connected</strong>.</td></tr>
+        <tr><td>WASL Response</td><td>The state WASL returned, for example <code>MOVING</code>, <code>PARKED_ENGINE_ON</code>, <code>PARKED_ENGINE_OFF</code>, <code>DEVICE_NO_SIGNAL</code>, <code>DEVICE_NOT_WORKING</code>.</td></tr>
     </table>
 
-    <h2>Excel export</h2>
-    <p><strong>⚙ Export options</strong> (same as the site): switch each sheet on/off, tick and reorder columns, sort by two columns, and optionally export only the rows matching the on-screen filter. The choice is saved as the default for everyone when signed in to the Al Safi reports, otherwise in this browser. Three sheets: <strong>Battery voltage</strong> (one row per sensor, Low rows red, No reading rows grey), <strong>Gateways</strong> (one row per object: IMEI, gateway battery, power supply, last packet, counts, error) and <strong>All sensors</strong> (every configured sensor with its latest value). The file is a normal <code>.xlsx</code> (ExcelJS, loaded from cdnjs).</p>
+    <h2>Another account and your session</h2>
+    <p>For <em>Another account</em> the sign-in is done by the extension's backend (<code>api/wasl.js</code>), not by your browser,
+       so your own PILOT session is not switched. The backend signs in, reads the list, signs out and keeps nothing.
+       The password stays in the page's memory only, so <em>Refresh</em> works until PILOT is reloaded. Accounts with
+       two-factor sign-in are not supported.</p>
 
-    <h2>Other Al Safi reports (own icons on the left bar)</h2>
+    <h2>Data sources</h2>
+    <table>
+        <tr><th>Data</th><th>Source</th><th>Support level</th></tr>
+        <tr><td>Vehicle list</td><td><code>ax/tree.php?vehs=1&amp;state=2&amp;node=root</code> (hierarchical, walked through <code>children</code>)</td><td>Legacy interface</td></tr>
+        <tr><td>WASL time and state</td><td>PILOT live WebSocket <code>&lt;base_url&gt;WS</code>: the vehicle ids are sent, PILOT answers with each vehicle's state including <code>wasl</code> (Unix seconds) and <code>wasl_state</code></td><td>Runtime observation (PILOT 7.x, ksa.pilot-gps.com, November 2026)</td></tr>
+        <tr><td>Sign-in for another account</td><td>POST <code>/backend/</code> with <code>username</code>, <code>password</code> (PILOT's login form), session cookie <code>PILOTID</code></td><td>Runtime observation</td></tr>
+    </table>
+    <p>Times are shown with PILOT's own date format (account time zone); the CSV export uses the same text.
+       Vehicles not registered in WASL simply have no WASL time and are <em>Not connected</em>.</p>
+
+    <h2>Installation</h2>
+    <ol>
+        <li>Deploy this folder to Vercel (static files plus the <code>api/wasl.js</code> function, Node 22).</li>
+        <li>Check that <code>https://&lt;your-project&gt;.vercel.app/Module.js</code> opens as JavaScript.</li>
+        <li>PILOT Admin → Extensions: name <code>wasl_status</code>, URL <code>https://&lt;your-project&gt;.vercel.app/</code> (base URL, trailing slash).</li>
+        <li>Grant the extension to the accounts that need it, then reload PILOT.</li>
+    </ol>
+    <p>The extension calls its backend at <code>/store/wasl_status/api/wasl</code> (PILOT's same-origin proxy).
+       If the files are hosted somewhere without the function (for example GitHub Pages), set the extension setting
+       <code>api_url</code> to the full backend address, for example <code>https://&lt;your-project&gt;.vercel.app/api/wasl</code>.
+       The backend allows calls from <code>*.pilot-gps.com</code> only and signs in only to <code>*.pilot-gps.com</code> hosts.</p>
+
+    <h2>Troubleshooting</h2>
     <ul>
-        <li><strong>Temperature Report</strong>: period, sampling interval, ignition filter, minimum trip, vehicles &rarr; Generate. Daily table per vehicle (exit/entry, duration, running/idle/stopped/inactive, geozone, avg/min/max, readings; click a row for the readings), period average, Excel with Daily Detail / Averages / Readings.</li>
-        <li><strong>Geozones</strong>: the client sites used by the report. Draw, edit, move and delete circles and polygons on the map, import the ASD sites from the database or a KML/GeoJSON file, export GeoJSON, Save.</li>
-        <li><strong>Vehicles Battery</strong>: latest packet of every vehicle from today's log on gps.im2m.ws (battery %, external and battery voltage, all IO values, raw packet) and the full log of today.</li>
+        <li><strong>"PILOT session is not signed in"</strong> – reload PILOT and sign in again.</li>
+        <li><strong>"The WASL Status backend is not reachable"</strong> – the backend is not deployed at the registered URL; set <code>api_url</code>.</li>
+        <li><strong>"Invalid Login or Password"</strong> – the message comes from PILOT for the other account.</li>
+        <li>All vehicles <em>Not connected</em> – the account has no WASL module, or PILOT has not received WASL answers yet.</li>
     </ul>
-    <p>These three use the Al Safi report backend (<code>https://alsafi-temp-report.vercel.app</code>), because they read the GPS database and gps.im2m.ws. The first time, a sign-in window asks for the same password as the report site; the sign-in is kept in this browser for 7 days. An admin can point to another backend with the extension setting <code>api_url</code>.</p>
-
-    <h2>Data sources (read-only)</h2>
-    <pre>GET  ax/tree.php?vehs=1&amp;checked=1&amp;node=src           object tree
-POST ax/sensors/sensors.php  agent_id=&lt;id&gt;             sensor list (cached 30 min)
-GET  ax/sensors_trace.php?cmd=get&amp;agent_id=&lt;id&gt;
-     &amp;ts=&lt;dd.mm.yyyy HH:MM&gt;&amp;te=&lt;dd.mm.yyyy HH:MM&gt;
-     &amp;page=..&amp;start=..&amp;limit=100&amp;sort=[ts_date DESC]   raw packets</pre>
-    <p>These are legacy PILOT backend endpoints observed in the running web application; they are not part of the documented <code>/api/v3</code> API. Pages of 100 packets are read newest first until every sensor has a voltage (at most 2000 packets per object; one page for objects without wireless sensors). Three objects are read at a time. The sensor history reads up to 4000 packets of the last 24 hours.</p>
-
-    <h2>Technical details</h2>
-    <p><strong>Extension name:</strong> <code>battery_status</code><br>
-       <strong>Main class:</strong> <code>Store.battery_status.Module</code> (extends <code>Ext.Component</code>, entry <code>initModule()</code>)<br>
-       <strong>Version:</strong> <code>1.3.5</code> (2026-11-08)<br>
-       <strong>Styles:</strong> <code>/store/battery_status/style.css</code>, all classes prefixed <code>bs-</code></p>
-    <pre>battery_status/
-├── index.html     root file
-├── Module.js      extension code (all classes in one file)
-├── style.css      styles
-└── doc/
-    └── index.html this page</pre>
-</div>
+</main>
 </body>
 </html>

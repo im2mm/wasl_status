@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "api/wasl.js": { "maxDuration": 60 }
+  },
+  "headers": [
+    {
+      "source": "/(Module.js|style.css)",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    }
+  ]
+}
