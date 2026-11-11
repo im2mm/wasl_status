@@ -134,6 +134,13 @@ function collectWasl(backend, cookie, ids) {
     });
 }
 
+/** The account name PILOT shows in its header (ax/init.php -> conf.org.org_name). */
+async function accountName(session) {
+    const r = await fetch(session.backend + 'ax/init.php', { method: 'POST', headers: { Cookie: session.cookie, 'user-agent': UA } });
+    const j = await r.json();
+    return (j && j.conf && j.conf.org && j.conf.org.org_name) || '';
+}
+
 module.exports = async function handler(req, res) {
     cors(req, res);
     if (req.method === 'OPTIONS') { res.statusCode = 204; return res.end(); }
@@ -155,8 +162,11 @@ module.exports = async function handler(req, res) {
         });
         if (!treeResp.ok) throw Object.assign(new Error('PILOT vehicle list failed (HTTP ' + treeResp.status + ').'), { status: 502 });
         const vehicles = vehiclesFromTree(await treeResp.json());
-        const wasl = vehicles.length ? await collectWasl(session.backend, session.cookie, vehicles.map(v => v.id)) : {};
-        return send(res, 200, { account: username, vehicles, wasl });
+        const [wasl, account] = await Promise.all([
+            vehicles.length ? collectWasl(session.backend, session.cookie, vehicles.map(v => v.id)) : {},
+            accountName(session).catch(() => '')
+        ]);
+        return send(res, 200, { account: account || username, vehicles, wasl });
     } catch (e) {
         return send(res, e.status || 502, { error: e.message || String(e) });
     } finally {

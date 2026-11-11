@@ -75,6 +75,12 @@
         return Math.floor(s / 86400) + ' d ago';
     }
 
+    var collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
+
+    function naturalName(a, b) {
+        return collator.compare(String(a.get('name') || ''), String(b.get('name') || ''));
+    }
+
     /** Walks the hierarchical tree.php answer and returns the vehicles with their folder name. */
     function vehiclesFromTree(nodes) {
         var out = [], seen = {};
@@ -195,9 +201,9 @@
 
         currentUserName: function () {
             try {
-                var c = window.global_conf && global_conf.conf;
-                return (c && (c.login || c.usr_login || c.username)) ||
-                    (window.CurrentUser && CurrentUser.get && (CurrentUser.get('login') || CurrentUser.get('name'))) || '';
+                var c = window.global_conf && global_conf.conf,
+                    u = window.CurrentUser && (CurrentUser.data || CurrentUser);
+                return (c && c.org && c.org.org_name) || (u && u.accountName) || '';
             } catch (e) { return ''; }
         },
 
@@ -415,7 +421,7 @@
             me.filterText = '';
             me.store = Ext.create('Ext.data.Store', {
                 fields: ['id', 'name', 'plate', 'group', 'imei', { name: 'wasl', type: 'int', allowNull: true }, 'response', { name: 'connected', type: 'int' }],
-                sorters: [{ property: 'name', direction: 'ASC' }],
+                sorters: [{ property: 'name', direction: 'ASC', sorterFn: naturalName }],
                 data: []
             });
             me.tbar = [
@@ -463,6 +469,7 @@
         fill: function () {
             var s = this.module.service;
             this.store.loadData(s.rows);
+            this.store.sort();
             this.applyFilter();
             this.down('#title').setHtml('<b>' + t('WASL Status') + '</b> &nbsp;·&nbsp; ' + esc(s.account));
         },
