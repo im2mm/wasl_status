@@ -44,14 +44,15 @@
     }
 
     function pilotBase() {
-        var b = (typeof window.base_url === 'string' && window.base_url) ? window.base_url : '/backend/';
+        // PILOT declares base_url as a global lexical binding (not always a window property).
+        /* global base_url */
+        var b = (typeof base_url === 'string' && base_url) ? base_url : '/backend/';
+        if (!/^https?:/i.test(b)) { b = location.origin + (b.charAt(0) === '/' ? '' : '/') + b; }
         return b.charAt(b.length - 1) === '/' ? b : b + '/';
     }
 
     function wsUrl() {
-        var b = pilotBase();
-        if (!/^https?:/i.test(b)) { b = location.origin + (b.charAt(0) === '/' ? '' : '/') + b; }
-        return b.replace(/^http/i, 'ws') + 'WS';
+        return pilotBase().replace(/^http/i, 'ws') + 'WS';
     }
 
     function fmtTime(ts) {
@@ -159,17 +160,12 @@
         });
     }
 
+    /** GET in this browser's PILOT session (fetch, because PILOT's Ext.Ajax prefixes URLs with base_url). */
     function ajaxJson(url, params) {
-        return new Promise(function (resolve, reject) {
-            Ext.Ajax.request({
-                url: url,
-                method: 'GET',
-                params: params,
-                success: function (r) {
-                    try { resolve(JSON.parse(r.responseText)); } catch (e) { reject(new Error(t('Unexpected answer from PILOT.'))); }
-                },
-                failure: function (r) { reject(new Error(t('PILOT request failed') + ' (HTTP ' + r.status + ')')); }
-            });
+        return fetch(url + '?' + Ext.Object.toQueryString(params), { credentials: 'same-origin' }).then(function (r) {
+            if (r.status === 401 || r.status === 403) { throw new Error(t('PILOT session is not signed in.')); }
+            if (!r.ok) { throw new Error(t('PILOT request failed') + ' (HTTP ' + r.status + ')'); }
+            return r.json().catch(function () { throw new Error(t('Unexpected answer from PILOT.')); });
         });
     }
 
@@ -295,8 +291,10 @@
                     layout: 'anchor',
                     defaults: { anchor: '100%', labelWidth: 80 },
                     items: [
-                        { xtype: 'textfield', itemId: 'username', fieldLabel: t('Login'), value: prev.username || storageGet('username', ''), allowBlank: false },
+                        { xtype: 'textfield', itemId: 'username', fieldLabel: t('Login'), value: prev.username || storageGet('username', ''), allowBlank: false,
+                          inputAttrTpl: 'autocomplete="off" data-lpignore="true"' },
                         { xtype: 'textfield', itemId: 'password', fieldLabel: t('Password'), inputType: 'password', allowBlank: false,
+                          inputAttrTpl: 'autocomplete="new-password" data-lpignore="true"',
                           listeners: { specialkey: function (f, e) { if (e.getKey() === e.ENTER) { me.submit(); } } } },
                         { xtype: 'component', cls: 'ws-note', html: t('The sign-in is done by the extension, your PILOT session stays as it is. The password is not saved.') }
                     ]
