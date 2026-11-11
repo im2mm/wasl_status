@@ -96,7 +96,7 @@
                     seen[id] = true;
                     out.push({
                         id: id,
-                        name: String(n.name || n.text || id),
+                        name: String(n.name || n.text || id).trim(),
                         plate: n.info || '',
                         group: folder || n.group || '',
                         imei: n.uniqid || ''

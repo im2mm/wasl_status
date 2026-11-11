@@ -86,7 +86,7 @@ function vehiclesFromTree(nodes) {
             const id = Number(n.agentid || n.vehid || 0);
             if (id > 0 && !seen.has(id)) {
                 seen.add(id);
-                out.push({ id, name: String(n.name || n.text || id), plate: n.info || '', group: folder || n.group || '', imei: n.uniqid || '' });
+                out.push({ id, name: String(n.name || n.text || id).trim(), plate: n.info || '', group: folder || n.group || '', imei: n.uniqid || '' });
             }
         }
     })(Array.isArray(nodes) ? nodes : (nodes && nodes.children) || [], '');
