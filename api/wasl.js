@@ -97,7 +97,9 @@ function collectWasl(backend, cookie, ids) {
     return new Promise((resolve, reject) => {
         const data = {};
         let seen = 0, done = false, quiet = null;
+        // PILOT answers with this subprotocol for a signed-in session (and refuses otherwise).
         const ws = new WebSocket(backend.replace(/^http/i, 'ws') + 'WS', {
+            protocols: ['zap-protocol-v1'],
             headers: { Cookie: cookie, Origin: new URL(backend).origin, 'User-Agent': UA }
         });
         const finish = (err) => {

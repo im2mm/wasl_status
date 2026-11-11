@@ -131,7 +131,7 @@
             var capTimer = setTimeout(function () { finish(seen ? null : new Error(t('PILOT live connection did not answer.'))); }, 25000);
 
             try {
-                ws = new WebSocket(wsUrl());
+                ws = new WebSocket(wsUrl(), 'zap-protocol-v1');
             } catch (e) {
                 finish(e);
                 return;
